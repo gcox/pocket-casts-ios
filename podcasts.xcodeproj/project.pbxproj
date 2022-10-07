@@ -367,6 +367,7 @@
 		46666F0627D1289F00A141AA /* EpisodeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46666F0527D1289F00A141AA /* EpisodeAction.swift */; };
 		46673A2F27A9B66A005F9EF5 /* ScreenshotAutomation_iPad_Light_Interface.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 46673A2E27A9B66A005F9EF5 /* ScreenshotAutomation_iPad_Light_Interface.xctestplan */; };
 		46673A3127A9B67E005F9EF5 /* iPad_GenerateScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46673A3027A9B67E005F9EF5 /* iPad_GenerateScreenshots.swift */; };
+		466AD3EB28EF6C450029017B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 466AD3EA28EF6C450029017B /* AuthenticationServices.framework */; };
 		466DE3EE27877ACC0046F722 /* ExpandedEpisodeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466DE3ED27877ACC0046F722 /* ExpandedEpisodeListViewController.swift */; };
 		466DE3F2278783F70046F722 /* EpisodeListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466DE3F0278783F70046F722 /* EpisodeListHeaderView.swift */; };
 		466DE3F3278783F70046F722 /* EpisodeListHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 466DE3F1278783F70046F722 /* EpisodeListHeaderView.xib */; };
@@ -1853,6 +1854,7 @@
 		46673A2E27A9B66A005F9EF5 /* ScreenshotAutomation_iPad_Light_Interface.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScreenshotAutomation_iPad_Light_Interface.xctestplan; sourceTree = "<group>"; };
 		46673A3027A9B67E005F9EF5 /* iPad_GenerateScreenshots.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iPad_GenerateScreenshots.swift; sourceTree = "<group>"; };
 		46673A3227A9C046005F9EF5 /* ScreenshotAutomation_iPad_Dark_Interface.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ScreenshotAutomation_iPad_Dark_Interface.xctestplan; sourceTree = "<group>"; };
+		466AD3EA28EF6C450029017B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		466DE3ED27877ACC0046F722 /* ExpandedEpisodeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedEpisodeListViewController.swift; sourceTree = "<group>"; };
 		466DE3F0278783F70046F722 /* EpisodeListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeListHeaderView.swift; sourceTree = "<group>"; };
 		466DE3F1278783F70046F722 /* EpisodeListHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EpisodeListHeaderView.xib; sourceTree = "<group>"; };
@@ -2896,6 +2898,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				466AD3EB28EF6C450029017B /* AuthenticationServices.framework in Frameworks */,
 				468F00D327CD575C00FFAAAA /* FirebasePerformance in Frameworks */,
 				BD11C41D2524741C00E308E6 /* CarPlay.framework in Frameworks */,
 				BD44F750267C850000810148 /* DifferenceKit in Frameworks */,
@@ -5172,6 +5175,7 @@
 		BDBD53EE17019B2A0048C8C5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				466AD3EA28EF6C450029017B /* AuthenticationServices.framework */,
 				BD11C41C2524741C00E308E6 /* CarPlay.framework */,
 				BD3C61A5221A91150061341D /* liblottie-ios.a */,
 				BD3C61A3221A90EA0061341D /* liblottie-ios.a */,

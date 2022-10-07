@@ -1,8 +1,10 @@
+import AuthenticationServices
 import UIKit
 
 class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
     weak var upgradeRootViewController: UIViewController?
 
+    @IBOutlet weak var signInOptions: UIStackView!
     @IBOutlet var createAccountBtn: ThemeableRoundedButton! {
         didSet {
             createAccountBtn.setTitle(L10n.createAccount, for: .normal)
@@ -53,6 +55,7 @@ class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
 
         Analytics.track(.setupAccountShown)
+        setupProviderLoginView()
     }
 
     override func handleThemeChanged() {
@@ -107,5 +110,48 @@ class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .portrait // since this controller is presented modally it needs to tell iOS it only goes portrait
+    }
+}
+
+// MARK: - Apple Authentication
+
+extension ProfileIntroViewController {
+    func setupProviderLoginView() {
+        let authorizationButton = ASAuthorizationAppleIDButton()
+        authorizationButton.addTarget(self, action: #selector(handleAuthorizationAppleIDButtonPress), for: .touchUpInside)
+        signInOptions.addArrangedSubview(authorizationButton)
+    }
+
+    @objc
+    func handleAuthorizationAppleIDButtonPress() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+}
+
+extension ProfileIntroViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+}
+
+extension ProfileIntroViewController: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            let rawJWT =  String(data: appleIDCredential.identityToken!, encoding: .utf8)!
+            print("\n\n🍎 JWT: \(rawJWT)")
+        case let passwordCredential as ASPasswordCredential:
+            // Sign in using an existing iCloud Keychain credential.
+            break
+        default:
+            break
+        }
     }
 }
