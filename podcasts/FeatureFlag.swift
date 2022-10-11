@@ -12,4 +12,7 @@ enum FeatureFlag {
 
     /// Whether logging of Firebase events in console are enabled
     static let firebaseLoggingEnabled = false
+
+    /// Adds the Sign In With Apple options to the login flow
+    static let signInWithApple = false
 }
