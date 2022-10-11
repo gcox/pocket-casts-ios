@@ -72,6 +72,8 @@ internal enum L10n {
   internal static var accessibilitySignIn: String { return L10n.tr("Localizable", "accessibility_sign_in") }
   /// Sort and Options
   internal static var accessibilitySortAndOptions: String { return L10n.tr("Localizable", "accessibility_sort_and_options") }
+  /// Continue with Apple
+  internal static var accountAppleAuth: String { return L10n.tr("Localizable", "account_apple_auth") }
   /// Change Email
   internal static var accountChangeEmail: String { return L10n.tr("Localizable", "account_change_email") }
   /// Almost There!
@@ -96,6 +98,8 @@ internal enum L10n {
   internal static var accountDeleteAccountFirstAlertMsg: String { return L10n.tr("Localizable", "account_delete_account_first_alert_msg") }
   /// Delete Account?
   internal static var accountDeleteAccountTitle: String { return L10n.tr("Localizable", "account_delete_account_title") }
+  /// Log in
+  internal static var accountLogin: String { return L10n.tr("Localizable", "account_login") }
   /// Renews automatically monthly
   internal static var accountPaymentRenewsMonthly: String { return L10n.tr("Localizable", "account_payment_renews_monthly") }
   /// Renews automatically yearly

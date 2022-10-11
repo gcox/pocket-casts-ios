@@ -61,6 +61,9 @@
 /* Message portion of the nudge to inform the user that they are nearly done with the account set up steps. */
 "account_completion_nudge_msg" = "Finalize your payment to finish upgrading your account.";
 
+/* Button title that prompts the user to use Sign in with Apple to create an account or sign in. */
+"account_apple_auth" = "Continue with Apple";
+
 /* Title informing the user that their account has been successfully created */
 "account_created" = "Account Created";
 
@@ -87,6 +90,9 @@
 
 /* Title for the confirmation dialog asking the user to confirm they want to delete their account. */
 "account_delete_account_title" = "Delete Account?";
+
+/* Button title to prompt a user to login. */
+"account_login" = "Log in";
 
 /* Informs the user that their purchase will be automatically renewed monthly */
 "account_payment_renews_monthly" = "Renews automatically monthly";

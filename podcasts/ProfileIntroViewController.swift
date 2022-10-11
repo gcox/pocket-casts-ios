@@ -12,9 +12,31 @@ class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
 
     @IBOutlet var signInBtn: ThemeableRoundedButton! {
         didSet {
+            signInBtn.isHidden = FeatureFlag.signInWithApple
             signInBtn.setTitle(L10n.signIn, for: .normal)
             signInBtn.shouldFill = false
             signInBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)
+        }
+    }
+
+    @IBOutlet var appleAuthOption: IconThemeableRoundedButton! {
+        didSet {
+            appleAuthOption.isHidden = !FeatureFlag.signInWithApple
+            appleAuthOption.shouldFill = false
+            appleAuthOption.buttonStyle = .primaryText01
+            appleAuthOption.borderStyle = .primaryInteractive03
+            appleAuthOption.textStyle = .primaryUi01
+            appleAuthOption.setTitle(L10n.accountAppleAuth, for: .normal)
+            appleAuthOption.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)
+            appleAuthOption.icon = UIImage(systemName: "apple.logo")
+        }
+    }
+
+    @IBOutlet var passwordAuthOption: ThemeableUIButton! {
+        didSet {
+            passwordAuthOption.isHidden = !FeatureFlag.signInWithApple
+            passwordAuthOption.setTitle(L10n.accountLogin, for: .normal)
+            passwordAuthOption.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.semibold)
         }
     }
 
@@ -107,5 +129,10 @@ class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         .portrait // since this controller is presented modally it needs to tell iOS it only goes portrait
+    }
+
+    // MARK: - Apple Auth
+
+    @IBAction func handleAppleAuthButtonPress(_ sender: Any) {
     }
 }
