@@ -100,28 +100,38 @@ public extension ApiServerHandler {
                 return
             }
 
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let responseData = data, error == nil, response?.extractStatusCode() == ServerConstants.HttpConstants.ok else {
-                    let errorResponse = ApiServerHandler.extractErrorResponse(data: data, error: error)
-                    FileLog.shared.addMessage("Unable to obtain token, status code: \(response?.extractStatusCode() ?? -1), server error: \(errorResponse?.rawValue ?? "none")")
-                    completion(nil, nil, errorResponse)
-
-                    return
-                }
-
-                do {
-                    let response = try Api_UserLoginResponse(serializedData: responseData)
+            obtainToken(request: request) { result in
+                switch result {
+                case .success(let response):
                     completion(response.token, response.uuid, nil)
-                } catch {
-                    FileLog.shared.addMessage("Error occurred while trying to unpack token request \(error.localizedDescription)")
-                    completion(nil, nil, nil)
+                case .failure(let error):
+                    completion(nil, nil, error)
                 }
-
-            }.resume()
+            }
         } catch {
             FileLog.shared.addMessage("obtainToken failed \(error.localizedDescription)")
             completion(nil, nil, nil)
         }
+    }
+
+    internal func obtainToken(request: URLRequest, completion: @escaping (Result<AuthenticationResponse, APIError>) -> Void) {
+        urlSession.dataTask(with: request) { data, response, error in
+            guard let responseData = data, error == nil, response?.extractStatusCode() == ServerConstants.HttpConstants.ok else {
+                let errorResponse = ApiServerHandler.extractErrorResponse(data: data, error: error)
+                FileLog.shared.addMessage("Unable to obtain token, status code: \(response?.extractStatusCode() ?? -1), server error: \(errorResponse?.rawValue ?? "none")")
+                completion(.failure(errorResponse ?? .UNKNOWN))
+                return
+            }
+
+            do {
+                let response = try Api_UserLoginResponse(serializedData: responseData)
+                completion(.success(AuthenticationResponse(from: response)))
+            } catch {
+                FileLog.shared.addMessage("Error occurred while trying to unpack token request \(error.localizedDescription)")
+                completion(.failure(.UNKNOWN))
+            }
+
+        }.resume()
     }
 
     internal class func extractErrorResponse(data: Data?, error: Error? = nil) -> APIError? {

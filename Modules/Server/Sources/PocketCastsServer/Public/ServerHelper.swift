@@ -111,15 +111,15 @@ public class ServerHelper: NSObject {
         return request
     }
 
-    class func createProtoRequest(url: URL, data: Data) -> URLRequest? {
-        var request = createEmptyProtoRequest(url: url)
+    class func createProtoRequest(url: URL, data: Data, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, timeoutInterval: TimeInterval = 15.seconds) -> URLRequest? {
+        var request = createEmptyProtoRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
         request?.httpBody = data
 
         return request
     }
 
-    class func createEmptyProtoRequest(url: URL) -> URLRequest? {
-        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 15.seconds)
+    class func createEmptyProtoRequest(url: URL, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, timeoutInterval: TimeInterval = 15.seconds) -> URLRequest? {
+        var request = URLRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
         request.httpMethod = "POST"
         request.addValue("application/octet-stream", forHTTPHeaderField: ServerConstants.HttpHeaders.accept)
         request.setValue("application/octet-stream", forHTTPHeaderField: ServerConstants.HttpHeaders.contentType)

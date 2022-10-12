@@ -1,5 +1,4 @@
 import UIKit
-import PocketCastsServer
 import AuthenticationServices
 
 class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
@@ -157,16 +156,28 @@ extension ProfileIntroViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            ApiServerHandler.shared.validateLogin(identityToken: appleIDCredential.identityToken) { result in
-                switch result {
-                case .success:
-                    print("🐻‍❄️ Succuss")
-                case .failure:
-                    print("🐻‍❄️ Sad")
-                }
+            DispatchQueue.main.async {
+                self.handleAppleIDCredential(appleIDCredential)
             }
         default:
             break
         }
+    }
+
+    func handleAppleIDCredential(_ appleIDCredential: ASAuthorizationAppleIDCredential) {
+        let progressAlert = ShiftyLoadingAlert(title: L10n.syncAccountLogin)
+        progressAlert.showAlert(self, hasProgress: false, completion: {
+            AuthenticationHelper.processAppleIDCredential(appleIDCredential) { [unowned self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        progressAlert.hideAlert(false)
+                        self.signingProcessCompleted()
+                    case .failure:
+                        print("🐻‍❄️ Sad")
+                    }
+                }
+            }
+        })
     }
 }
