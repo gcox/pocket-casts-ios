@@ -124,7 +124,7 @@ public extension ApiServerHandler {
         }
     }
 
-    private class func extractErrorResponse(data: Data?, error: Error? = nil) -> APIError? {
+    internal class func extractErrorResponse(data: Data?, error: Error? = nil) -> APIError? {
         if let data = data {
             do {
                 let errorJson = try JSON(data: data)

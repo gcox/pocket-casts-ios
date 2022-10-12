@@ -1,4 +1,6 @@
 import UIKit
+import PocketCastsServer
+import AuthenticationServices
 
 class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
     weak var upgradeRootViewController: UIViewController?
@@ -134,5 +136,37 @@ class ProfileIntroViewController: PCViewController, SyncSigninDelegate {
     // MARK: - Apple Auth
 
     @IBAction func handleAppleAuthButtonPress(_ sender: Any) {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.email]
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+}
+
+extension ProfileIntroViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+}
+
+extension ProfileIntroViewController: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            ApiServerHandler.shared.validateLogin(identityToken: appleIDCredential.identityToken) { result in
+                switch result {
+                case .success:
+                    print("🐻‍❄️ Succuss")
+                case .failure:
+                    print("🐻‍❄️ Sad")
+                }
+            }
+        default:
+            break
+        }
     }
 }
