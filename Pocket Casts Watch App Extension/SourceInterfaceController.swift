@@ -107,7 +107,7 @@ class SourceInterfaceController: PCInterfaceController {
     }
 
     private func reload() {
-        let isPlusUser = SubscriptionHelper.hasActiveSubscription()
+        let isPlusUser = WatchSyncManager.shared.isPlusUser()
         phoneNowPlayingImage.setHidden(!SourceManager.shared.isPhone())
         watchNowPlayingIcon.setHidden(!SourceManager.shared.isWatch())
 
@@ -153,7 +153,7 @@ class SourceInterfaceController: PCInterfaceController {
     }
 
     @IBAction func watchTapped() {
-        guard SubscriptionHelper.hasActiveSubscription() else { return }
+        guard WatchSyncManager.shared.isPlusUser() else { return }
 
         if SourceManager.shared.isPhone(), !nowPlayingEpisodesMatchOnBothSources() {
             RefreshManager.shared.refreshPodcasts(forceEvenIfRefreshedRecently: false)
