@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var appLifecycleAnalytics = AppLifecycleAnalytics()
 
     private var backgroundSignOutListener: BackgroundSignOutListener?
+    var protectedDataObserver: NSObjectProtocol?
 
     // MARK: - App Lifecycle
 

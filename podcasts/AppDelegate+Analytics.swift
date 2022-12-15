@@ -16,7 +16,13 @@ extension AppDelegate {
     }
 
     private func setupAdapters() {
+        guard Analytics.isRegistered == false else { return }
+
         Analytics.register(adapters: [AnalyticsLoggingAdapter(), TracksAdapter(), CrashLoggingAdapter()])
+
+        if let protectedDataObserver {
+            NotificationCenter.default.removeObserver(protectedDataObserver)
+        }
     }
 
     private func addAnalyticsObservers() {
@@ -30,7 +36,7 @@ extension AppDelegate {
         }
 
         // Setup adapters if needed after protected data becomes available
-        NotificationCenter.default.addObserver(forName: UIApplication.protectedDataDidBecomeAvailableNotification, object: nil, queue: .main) { [weak self] _ in
+        protectedDataObserver = NotificationCenter.default.addObserver(forName: UIApplication.protectedDataDidBecomeAvailableNotification, object: nil, queue: .main) { [weak self] _ in
             self?.setupAdapters()
         }
     }
