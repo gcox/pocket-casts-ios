@@ -4,13 +4,18 @@ class Analytics {
     static let shared = Analytics()
     private var adapters: [AnalyticsAdapter]?
 
+    /// Whether or not the adpaters have been registered already
+    static var isRegistered = false
+
     static func register(adapters: [AnalyticsAdapter]) {
         Self.shared.adapters = adapters
+        Self.isRegistered = true
     }
 
     /// Unregisters all the registered adapters, disabling analytics
     static func unregister() {
         Self.shared.adapters = nil
+        Self.isRegistered = false
     }
 
     /// Convenience method to call Analytics.shared.track*
