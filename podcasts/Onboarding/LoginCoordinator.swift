@@ -95,7 +95,10 @@ extension LoginCoordinator {
     }
 
     func signInWithGoogleTapped() {
-        GIDSignIn.sharedInstance.signIn(with: GIDConfiguration(clientID: "910146533958-6jtcbjbvk5gjnr6p8r5de1477dmk3kdi.apps.googleusercontent.com"), presenting: navigationController!) { signInResult, error in
+        let config = GIDConfiguration(clientID: ApiCredentials.googleSignInSecret,
+                                      serverClientID: "910146533958-6jtcbjbvk5gjnr6p8r5de1477dmk3kdi.apps.googleusercontent.com")
+
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: navigationController!) { signInResult, error in
             guard error == nil else { return }
 
             print(signInResult?.authentication.idToken)
