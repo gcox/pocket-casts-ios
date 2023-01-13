@@ -4,6 +4,7 @@ import JLRoutes
 import PocketCastsDataModel
 import PocketCastsServer
 import PocketCastsUtils
+import GoogleSignIn
 
 extension AppDelegate {
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
@@ -47,6 +48,10 @@ extension AppDelegate {
             // check to see what the scheme is we support itpc, http, feed & our own pktc
             if let scheme = url.scheme, scheme == "pktc" {
                 JLRoutes.routeURL(url)
+            } else {
+                if GIDSignIn.sharedInstance.handle(url) {
+                    return true
+                }
             }
         }
         return true

@@ -3,6 +3,7 @@ import AuthenticationServices
 import PocketCastsServer
 import SwiftUI
 import PocketCastsDataModel
+import GoogleSignIn
 
 class LoginCoordinator: NSObject, OnboardingModel {
     var navigationController: UINavigationController? = nil
@@ -93,7 +94,13 @@ extension LoginCoordinator {
         authorizationController.performRequests()
     }
 
-    func signInWithGoogleTapped() { }
+    func signInWithGoogleTapped() {
+        GIDSignIn.sharedInstance.signIn(with: GIDConfiguration(clientID: "910146533958-6jtcbjbvk5gjnr6p8r5de1477dmk3kdi.apps.googleusercontent.com"), presenting: navigationController!) { signInResult, error in
+            guard error == nil else { return }
+
+            print(signInResult?.authentication.idToken)
+          }
+    }
 }
 
 extension LoginCoordinator: SyncSigninDelegate, CreateAccountDelegate {
