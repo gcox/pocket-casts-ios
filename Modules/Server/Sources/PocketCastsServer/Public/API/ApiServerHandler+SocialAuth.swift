@@ -61,14 +61,25 @@ public extension ApiServerHandler {
     }
 
     private func tokenRequest(identityToken: String?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, timeoutInterval: TimeInterval = 15.seconds) -> URLRequest? {
+        guard let identityToken else {
+            return nil
+        }
+
+        var data = Api_TokenLoginRequest()
+        data.idToken = identityToken
+
         let url = ServerHelper.asUrl(ServerConstants.Urls.api() + "user/login_apple")
-        guard let identityToken = identityToken,
-              var request = ServerHelper.createEmptyProtoRequest(url: url, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
+        guard let data = try? data.serializedData()
         else { return nil }
 
-        request.setValue("Bearer \(identityToken)", forHTTPHeaderField: ServerConstants.HttpHeaders.authorization)
+        var request = ServerHelper.createJsonRequest(url: url, params: AppleRequest(id_token: identityToken), timeout: timeoutInterval, cachePolicy: cachePolicy)
+//        var request = ServerHelper.createJsonRequest(url: url, data: data, timeout: timeoutInterval, cachePolicy: cachePolicy)
         return request
     }
+}
+
+struct AppleRequest: Codable {
+    var id_token: String
 }
 
 // MARK: - Only available to the main app, not the watch app
