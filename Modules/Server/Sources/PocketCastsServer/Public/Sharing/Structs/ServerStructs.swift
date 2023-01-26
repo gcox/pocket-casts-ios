@@ -60,6 +60,12 @@ public struct PodcastExtraInfoResponse: Decodable {
         }
     }
 }
+
+public struct PodcastRatingResponse: Decodable {
+    public let rating: Double
+    public let count: Int
+}
+
 public struct ShareListResponse: Decodable {
     public var status: String? = nil
     public var message: String? = nil
