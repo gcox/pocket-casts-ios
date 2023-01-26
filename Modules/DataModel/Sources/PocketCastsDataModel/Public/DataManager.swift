@@ -938,3 +938,9 @@ public extension DataManager {
         endOfYearManager.episodesThatExist(dbQueue: dbQueue, uuids: uuids)
     }
 }
+
+public extension DataManager {
+    public func updateItunesId(uuid: String, iTunesId: Int?) {
+        podcastManager.updateItunesId(uuid: uuid, iTunesId: iTunesId, dbQueue: dbQueue)
+    }
+}

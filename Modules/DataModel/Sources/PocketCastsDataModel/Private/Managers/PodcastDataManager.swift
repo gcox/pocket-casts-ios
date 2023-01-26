@@ -500,6 +500,18 @@ class PodcastDataManager {
         }
     }
 
+    // MARK: - Extra Info
+    public func updateItunesId(uuid: String, iTunesId: Int?, dbQueue: FMDatabaseQueue) {
+        dbQueue.inDatabase { db in
+            do {
+                try db.executeUpdate("UPDATE \(DataManager.podcastTableName) SET iTunesId = ? WHERE uuid = ?", values: [DBUtils.nullIfNil(value: iTunesId), uuid])
+            } catch {
+                print(error)
+            }
+        }
+        cachePodcasts(dbQueue: dbQueue)
+    }
+
     // MARK: - Conversion
 
     private func createPodcastFrom(resultSet rs: FMResultSet) -> Podcast {
