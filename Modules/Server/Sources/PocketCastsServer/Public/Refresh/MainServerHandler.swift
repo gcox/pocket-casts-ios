@@ -99,6 +99,17 @@ public class MainServerHandler {
         }
     }
 
+    private struct PodcastExtraInfoRequest: BaseRequest {
+        var uuids: [String]?
+        var device: String?
+        var m: String?
+        var av: String?
+        var l: String?
+        var c: String?
+        var dt: String?
+        var v: String?
+    }
+
     public func sendOpmlChunk(feedUrls: [String] = [], pollUuids: [String] = [], completion: @escaping (ImportOpmlResponse?) -> Void) {
         guard let uniqueId = ServerConfig.shared.syncDelegate?.uniqueAppId() else {
             completion(ImportOpmlResponse.failedResponse())

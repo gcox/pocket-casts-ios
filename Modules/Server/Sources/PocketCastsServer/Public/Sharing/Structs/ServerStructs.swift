@@ -46,6 +46,20 @@ public struct ExportPodcastsResponse: Decodable {
     }
 }
 
+public struct PodcastExtraInfoResponse: Decodable {
+    public var status: String? = nil
+    public var message: String? = nil
+    public var result: [Info]?
+
+    public struct Info: Decodable {
+        public var uuid: String
+        public var itunesId: Int?
+
+        public enum CodingKeys: String, CodingKey {
+            case uuid, itunesId = "itunes_id"
+        }
+    }
+}
 public struct ShareListResponse: Decodable {
     public var status: String? = nil
     public var message: String? = nil
