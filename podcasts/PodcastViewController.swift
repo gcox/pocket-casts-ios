@@ -31,6 +31,7 @@ protocol PodcastActionsDelegate: AnyObject {
     func downloadAllTapped()
     func queueAllTapped()
     func downloadableEpisodeCount(items: [ListItem]?) -> Int
+    func rating() -> PodcastRatingResponse?
 
     func didActivateSearch()
 
@@ -50,6 +51,7 @@ class PodcastViewController: FakeNavViewController, PodcastActionsDelegate, Sync
 
     var cellHeights: [IndexPath: CGFloat] = [:]
 
+    var ratingResponse: PodcastRatingResponse? = nil
     private var loadingPodcastRating = false
 
     private var podcastInfo: PodcastInfo?
@@ -396,6 +398,7 @@ class PodcastViewController: FakeNavViewController, PodcastActionsDelegate, Sync
                     loadPodcastInfoFromUuid(podcastUuid)
                 }
             }
+
         } else if let uuid = podcastInfo?.uuid {
             loadPodcastInfoFromUuid(uuid)
         } else if let iTunesId = podcastInfo?.iTunesId {
@@ -792,6 +795,20 @@ class PodcastViewController: FakeNavViewController, PodcastActionsDelegate, Sync
             }
         }
         return count
+    }
+
+    func rating() -> PodcastRatingResponse? {
+        if ratingResponse == nil {
+            if let uuid = podcast?.uuid {
+                getRating(uuid: uuid)
+            } else if let iTunesId = podcastInfo?.iTunesId {
+                getRating(iTunesId: iTunesId)
+            } else if let otherUuid = podcastInfo?.uuid {
+                getRating(uuid: otherUuid)
+            }
+        }
+
+        return ratingResponse
     }
 
     func enableMultiSelect() {
