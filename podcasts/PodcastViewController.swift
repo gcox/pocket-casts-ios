@@ -50,6 +50,8 @@ class PodcastViewController: FakeNavViewController, PodcastActionsDelegate, Sync
 
     var cellHeights: [IndexPath: CGFloat] = [:]
 
+    private var loadingPodcastRating = false
+
     private var podcastInfo: PodcastInfo?
     var loadingPodcastInfo = false
     lazy var isoFormatter: ISO8601DateFormatter = {
@@ -900,5 +902,33 @@ extension PodcastViewController: AnalyticsSourceProvider {
 private extension PodcastViewController {
     var podcastUUID: String {
         podcast?.uuid ?? podcastInfo?.analyticsDescription ?? "unknown"
+    }
+}
+
+// MARK: - Ratings
+private extension PodcastViewController {
+    func getRating(uuid: String) {
+        guard loadingPodcastRating == false else { return }
+        loadingPodcastRating = true
+        Task {
+            ratingResponse = try? await PodcastRatings.rating(for: uuid)
+            reloadHeader()
+            loadingPodcastRating = false
+        }
+    }
+
+    func getRating(iTunesId: Int) {
+        guard loadingPodcastRating == false else { return }
+        loadingPodcastRating = true
+        Task {
+            ratingResponse = try? await PodcastRatings.rating(for: iTunesId)
+            reloadHeader()
+            loadingPodcastRating = false
+        }
+    }
+
+    @MainActor
+    func reloadHeader() {
+        episodesTable.reloadData()
     }
 }
