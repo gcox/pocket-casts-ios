@@ -250,6 +250,7 @@ class PodcastHeadingTableCell: ThemeableCell, SubscribeButtonDelegate, Expandabl
     private func updateLayout() {
         guard let podcast = delegate?.displayedPodcast(), let expanded = delegate?.isSummaryExpanded() else { return }
 
+        ratingStackView.isHidden = !expanded || delegate?.rating() == nil
         podcastName.isHidden = !expanded
         podcastCategory.isHidden = !expanded || podcastCategory.text == nil
         podcastDescription.isHidden = !expanded
