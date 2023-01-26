@@ -153,6 +153,14 @@ class PodcastHeadingTableCell: ThemeableCell, SubscribeButtonDelegate, Expandabl
         }
     }
 
+    @IBOutlet weak var ratingStackView: UIStackView!
+    @IBOutlet weak var star1: UIImageView!
+    @IBOutlet weak var star2: UIImageView!
+    @IBOutlet weak var star3: UIImageView!
+    @IBOutlet weak var star4: UIImageView!
+    @IBOutlet weak var star5: UIImageView!
+    @IBOutlet weak var ratingLabel: UILabel!
+
     // we don't want a selection state
     override func setSelected(_ selected: Bool, animated: Bool) {}
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {}
