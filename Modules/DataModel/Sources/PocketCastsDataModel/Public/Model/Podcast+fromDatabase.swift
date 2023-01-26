@@ -53,6 +53,7 @@ extension Podcast {
         podcast.showArchived = rs.bool(forColumn: "showArchived")
         podcast.refreshAvailable = rs.bool(forColumn: "refreshAvailable")
         podcast.folderUuid = rs.string(forColumn: "folderUuid")
+        podcast.itunesId = rs.object(forColumn: "itunesId") as? Int32
 
         return podcast
     }

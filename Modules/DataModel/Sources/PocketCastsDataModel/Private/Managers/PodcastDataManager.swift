@@ -58,7 +58,8 @@ class PodcastDataManager {
         "fullSyncLastSyncAt",
         "showArchived",
         "refreshAvailable",
-        "folderUuid"
+        "folderUuid",
+        "itunesId"
     ]
 
     func setup(dbQueue: FMDatabaseQueue) {
@@ -556,6 +557,7 @@ class PodcastDataManager {
         values.append(podcast.showArchived)
         values.append(podcast.refreshAvailable)
         values.append(DBUtils.nullIfNil(value: podcast.folderUuid))
+        values.append(DBUtils.nullIfNil(value: podcast.itunesId))
 
         if includeIdForWhere {
             values.append(podcast.id)

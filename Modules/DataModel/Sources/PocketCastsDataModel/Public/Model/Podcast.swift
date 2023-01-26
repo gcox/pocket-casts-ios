@@ -50,6 +50,7 @@ public class Podcast: NSObject, Identifiable {
     @objc public var showArchived = false
     @objc public var refreshAvailable = false
     @objc public var folderUuid: String?
+    public var itunesId: Int32? = nil
 
     // transient not saved to database
     public var cachedUnreadCount = 0

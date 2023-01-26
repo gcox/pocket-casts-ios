@@ -641,6 +641,17 @@ class DatabaseHelper {
             }
         }
 
+        if schemaVersion < 41 {
+            do {
+                try db.executeUpdate("ALTER TABLE SJPodcast ADD COLUMN itunesId INTEGER;", values: nil)
+
+                schemaVersion = 41
+            } catch {
+                failedAt(41)
+                return
+            }
+        }
+
         db.commit()
     }
 }
