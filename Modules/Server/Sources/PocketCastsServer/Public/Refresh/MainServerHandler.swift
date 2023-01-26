@@ -179,6 +179,25 @@ public class MainServerHandler {
         }.resume()
     }
 
+    public func podcastExtraInfo(uuids: [String]) async throws -> PodcastExtraInfoResponse? {
+        guard let uniqueId = ServerConfig.shared.syncDelegate?.uniqueAppId() else {
+            return nil
+        }
+
+        var request = PodcastExtraInfoRequest()
+        request.uuids = uuids
+
+        var baseRequest = request as BaseRequest
+        addStandardParams(baseRequest: &baseRequest, uniqueId: uniqueId)
+
+        let url = ServerHelper.asUrl(ServerConstants.Urls.main() + "podcasts/extra_info")
+        guard let request = ServerHelper.createJsonRequest(url: url, params: request, timeout: MainServerHandler.callTimeout, cachePolicy: .reloadIgnoringCacheData) else {
+            return nil
+        }
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try JSONDecoder().decode(PodcastExtraInfoResponse.self, from: data)
+    }
     public func lookupShareLink(sharePath: String, completion: @escaping (ShareListResponse?) -> Void) {
         guard let uniqueId = ServerConfig.shared.syncDelegate?.uniqueAppId() else {
             completion(ShareListResponse.failedResponse())
