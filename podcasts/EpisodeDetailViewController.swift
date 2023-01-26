@@ -393,7 +393,14 @@ class EpisodeDetailViewController: FakeNavViewController, UIDocumentInteractionC
     }
 
     @objc private func starTapped(_ sender: UIButton) {
-        EpisodeManager.setStarred(!episode.keepEpisode, episode: episode, updateSyncStatus: SyncManager.isUserLoggedIn())
+        let starred = !episode.keepEpisode
+        EpisodeManager.setStarred(starred, episode: episode, updateSyncStatus: SyncManager.isUserLoggedIn())
+
+        if starred {
+            self.starCount += 1
+        } else {
+            self.starCount = max(0, self.starCount-1)
+        }
     }
 
     // MARK: - Sharing
