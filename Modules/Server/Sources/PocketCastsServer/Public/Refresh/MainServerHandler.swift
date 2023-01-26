@@ -198,6 +198,19 @@ public class MainServerHandler {
         let (data, _) = try await URLSession.shared.data(for: request)
         return try JSONDecoder().decode(PodcastExtraInfoResponse.self, from: data)
     }
+
+    public func podcastRating(iTunesId: Int) async throws -> PodcastRatingResponse? {
+        let url = ServerHelper.asUrl("https://podcast.emily.tools/ratings/index.php?id=" + String(iTunesId))
+
+        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: MainServerHandler.callTimeout)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: ServerConstants.HttpHeaders.accept)
+        request.setValue(ServerConfig.shared.syncDelegate?.privateUserAgent(), forHTTPHeaderField: ServerConstants.HttpHeaders.userAgent)
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try JSONDecoder().decode(PodcastRatingResponse.self, from: data)
+    }
+
     public func lookupShareLink(sharePath: String, completion: @escaping (ShareListResponse?) -> Void) {
         guard let uniqueId = ServerConfig.shared.syncDelegate?.uniqueAppId() else {
             completion(ShareListResponse.failedResponse())
