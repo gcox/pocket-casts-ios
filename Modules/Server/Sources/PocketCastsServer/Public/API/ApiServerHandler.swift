@@ -47,6 +47,11 @@ public class ApiServerHandler {
         apiQueue.addOperation(retrieveTask)
     }
 
+    public func retrieveEpisodeStarCount(episode: Episode, completion: @escaping (Int?) -> Void) {
+        let retrieveTask = RetrieveEpisodeStarsTask(episode: episode, completion: completion)
+        apiQueue.addOperation(retrieveTask)
+    }
+
     public func deleteAccount(completion: @escaping (Bool, String?) -> Void) {
         let deleteAccountTask = DeleteAccountTask()
         deleteAccountTask.completion = completion
