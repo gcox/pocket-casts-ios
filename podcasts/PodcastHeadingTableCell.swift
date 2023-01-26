@@ -239,6 +239,40 @@ class PodcastHeadingTableCell: ThemeableCell, SubscribeButtonDelegate, Expandabl
 
             layoutIfNeeded()
         }
+
+        if let rating = delegate.rating() {
+            let imageViews = [star1, star2, star3, star4, star5]
+
+            let stars = Int(rating.rating)
+            let half = rating.rating.truncatingRemainder(dividingBy: 1)
+
+            for (index, imageView) in imageViews.enumerated() {
+                // If the index is less than the full stars, then show a full star
+                if index < stars {
+                    imageView?.image = UIImage(systemName: "star.fill")
+                    continue
+                }
+
+                // If it's more than the full stars, then show an empty star
+                if index > stars {
+                    imageView?.image = UIImage(systemName: "star")
+                    continue
+                }
+
+                // If we're less than half, then show the empty star
+                if half < 0.5 {
+                    imageView?.image = UIImage(systemName: "star")
+                    continue
+                }
+
+                imageView?.image = UIImage(systemName: "star.fill.left")
+            }
+
+            ratingLabel.text = "\(rating.rating) · \(rating.count.roundedWithAbbreviations)"
+            ratingStackView.isHidden = false
+        } else {
+            ratingStackView.isHidden = true
+        }
     }
 
     @objc private func podcastImageLongPressed(_ sender: UILongPressGestureRecognizer) {
