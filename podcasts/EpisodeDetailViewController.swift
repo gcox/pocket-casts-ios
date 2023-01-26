@@ -172,6 +172,27 @@ class EpisodeDetailViewController: FakeNavViewController, UIDocumentInteractionC
         Analytics.track(.episodeDetailShown, properties: ["source": viewSource])
     }
 
+    private func updateStarredCount() {
+        ApiServerHandler.shared.retrieveEpisodeStarCount(episode: episode) { count in
+            // Don't update the count if we don't have it, or if it's 0
+            guard let count, count > 0 else { return }
+            self.starCount = count
+        }
+    }
+
+    /// Update the label to show the count if we have one
+    private var starCount: Int = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                if self.starCount > 0 {
+                    self.starButton?.setTitle(" \(self.starCount)", for: .normal)
+                } else {
+                    self.starButton?.setTitle("", for: .normal)
+                }
+            }
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -281,6 +302,8 @@ class EpisodeDetailViewController: FakeNavViewController, UIDocumentInteractionC
             guard let updatedEpisode = DataManager.sharedManager.findEpisode(uuid: episode.uuid) else { return }
             episode = updatedEpisode
         }
+
+        updateStarredCount()
 
         if episode.downloading() || episode.queued() || episode.waitingForWifi() {
             if downloadIndicator.isHidden { downloadIndicator.isHidden = false }
