@@ -1342,6 +1342,32 @@ struct Api_EpisodeWithPodcast {
   init() {}
 }
 
+struct Api_EpisodeStarCountRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var episode: String = String()
+
+  var podcast: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Api_EpisodeStarCountResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var count: Int64 = 0
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 struct Api_UpdateEpisodesArchiveRequest {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -1660,8 +1686,6 @@ struct Api_YearHistoryRequest {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var deviceTime: Int64 = 0
-
   var version: String = String()
 
   var count: Bool = false
@@ -1677,8 +1701,6 @@ struct Api_YearHistoryResponse {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
-
-  var isModified: Bool = false
 
   var record: Api_YearHistoryResponse.OneOf_Record? = nil
 
@@ -1870,6 +1892,8 @@ struct Api_UserTokenRequest {
   var grantType: String = String()
 
   var refreshToken: String = String()
+
+  var scope: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -4490,6 +4514,76 @@ struct Api_PodcastFolderSorting {
   init() {}
 }
 
+struct Api_TokenLoginRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var idToken: String = String()
+
+  var email: String = String()
+
+  var password: String = String()
+
+  var scope: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Api_TokenLoginResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var email: String = String()
+
+  var uuid: String = String()
+
+  var isNew: Bool = false
+
+  var accessToken: String = String()
+
+  var tokenType: String = String()
+
+  var expiresIn: Int32 = 0
+
+  var refreshToken: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Api_TokenErrorResponse {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var error: String = String()
+
+  var errorDescription: String = String()
+
+  var errorUri: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Api_VerifyEmailRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var verifyEmailToken: String = String()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension Api_UserChangeResponse: @unchecked Sendable {}
 extension Api_UserResetPasswordRequest: @unchecked Sendable {}
@@ -4534,6 +4628,8 @@ extension Api_StatsRequest: @unchecked Sendable {}
 extension Api_UpdateEpisodeStarRequest: @unchecked Sendable {}
 extension Api_UpdateEpisodeStarResponse: @unchecked Sendable {}
 extension Api_EpisodeWithPodcast: @unchecked Sendable {}
+extension Api_EpisodeStarCountRequest: @unchecked Sendable {}
+extension Api_EpisodeStarCountResponse: @unchecked Sendable {}
 extension Api_UpdateEpisodesArchiveRequest: @unchecked Sendable {}
 extension Api_UpNextSyncRequest: @unchecked Sendable {}
 extension Api_UpNextPlayRequest: @unchecked Sendable {}
@@ -4604,6 +4700,10 @@ extension Api_PodcastFolderRequest: @unchecked Sendable {}
 extension Api_PodcastFolder: @unchecked Sendable {}
 extension Api_PodcastFolderSortRequest: @unchecked Sendable {}
 extension Api_PodcastFolderSorting: @unchecked Sendable {}
+extension Api_TokenLoginRequest: @unchecked Sendable {}
+extension Api_TokenLoginResponse: @unchecked Sendable {}
+extension Api_TokenErrorResponse: @unchecked Sendable {}
+extension Api_VerifyEmailRequest: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -7057,6 +7157,76 @@ extension Api_EpisodeWithPodcast: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 }
 
+extension Api_EpisodeStarCountRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".EpisodeStarCountRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "episode"),
+    2: .same(proto: "podcast"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.episode) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.podcast) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.episode.isEmpty {
+      try visitor.visitSingularStringField(value: self.episode, fieldNumber: 1)
+    }
+    if !self.podcast.isEmpty {
+      try visitor.visitSingularStringField(value: self.podcast, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Api_EpisodeStarCountRequest, rhs: Api_EpisodeStarCountRequest) -> Bool {
+    if lhs.episode != rhs.episode {return false}
+    if lhs.podcast != rhs.podcast {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Api_EpisodeStarCountResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".EpisodeStarCountResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "count"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularInt64Field(value: &self.count) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.count != 0 {
+      try visitor.visitSingularInt64Field(value: self.count, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Api_EpisodeStarCountResponse, rhs: Api_EpisodeStarCountResponse) -> Bool {
+    if lhs.count != rhs.count {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Api_UpdateEpisodesArchiveRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".UpdateEpisodesArchiveRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -7762,7 +7932,6 @@ extension Api_HistoryResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 extension Api_YearHistoryRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".YearHistoryRequest"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "device_time"),
     2: .same(proto: "version"),
     3: .same(proto: "count"),
     4: .same(proto: "year"),
@@ -7774,7 +7943,6 @@ extension Api_YearHistoryRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt64Field(value: &self.deviceTime) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.version) }()
       case 3: try { try decoder.decodeSingularBoolField(value: &self.count) }()
       case 4: try { try decoder.decodeSingularInt32Field(value: &self.year) }()
@@ -7784,9 +7952,6 @@ extension Api_YearHistoryRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.deviceTime != 0 {
-      try visitor.visitSingularInt64Field(value: self.deviceTime, fieldNumber: 1)
-    }
     if !self.version.isEmpty {
       try visitor.visitSingularStringField(value: self.version, fieldNumber: 2)
     }
@@ -7800,7 +7965,6 @@ extension Api_YearHistoryRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
   }
 
   static func ==(lhs: Api_YearHistoryRequest, rhs: Api_YearHistoryRequest) -> Bool {
-    if lhs.deviceTime != rhs.deviceTime {return false}
     if lhs.version != rhs.version {return false}
     if lhs.count != rhs.count {return false}
     if lhs.year != rhs.year {return false}
@@ -7812,7 +7976,6 @@ extension Api_YearHistoryRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 extension Api_YearHistoryResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".YearHistoryResponse"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "is_modified"),
     2: .same(proto: "count"),
     3: .same(proto: "history"),
   ]
@@ -7823,7 +7986,6 @@ extension Api_YearHistoryResponse: SwiftProtobuf.Message, SwiftProtobuf._Message
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBoolField(value: &self.isModified) }()
       case 2: try {
         var v: Int32?
         try decoder.decodeSingularInt32Field(value: &v)
@@ -7855,9 +8017,6 @@ extension Api_YearHistoryResponse: SwiftProtobuf.Message, SwiftProtobuf._Message
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
-    if self.isModified != false {
-      try visitor.visitSingularBoolField(value: self.isModified, fieldNumber: 1)
-    }
     switch self.record {
     case .count?: try {
       guard case .count(let v)? = self.record else { preconditionFailure() }
@@ -7873,7 +8032,6 @@ extension Api_YearHistoryResponse: SwiftProtobuf.Message, SwiftProtobuf._Message
   }
 
   static func ==(lhs: Api_YearHistoryResponse, rhs: Api_YearHistoryResponse) -> Bool {
-    if lhs.isModified != rhs.isModified {return false}
     if lhs.record != rhs.record {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -8234,6 +8392,7 @@ extension Api_UserTokenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     1: .same(proto: "code"),
     2: .standard(proto: "grant_type"),
     3: .standard(proto: "refresh_token"),
+    4: .same(proto: "scope"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -8245,6 +8404,7 @@ extension Api_UserTokenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       case 1: try { try decoder.decodeSingularStringField(value: &self.code) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self.grantType) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self.refreshToken) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.scope) }()
       default: break
       }
     }
@@ -8260,6 +8420,9 @@ extension Api_UserTokenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if !self.refreshToken.isEmpty {
       try visitor.visitSingularStringField(value: self.refreshToken, fieldNumber: 3)
     }
+    if !self.scope.isEmpty {
+      try visitor.visitSingularStringField(value: self.scope, fieldNumber: 4)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -8267,6 +8430,7 @@ extension Api_UserTokenRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if lhs.code != rhs.code {return false}
     if lhs.grantType != rhs.grantType {return false}
     if lhs.refreshToken != rhs.refreshToken {return false}
+    if lhs.scope != rhs.scope {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -12125,6 +12289,200 @@ extension Api_PodcastFolderSorting: SwiftProtobuf.Message, SwiftProtobuf._Messag
   static func ==(lhs: Api_PodcastFolderSorting, rhs: Api_PodcastFolderSorting) -> Bool {
     if lhs.uuid != rhs.uuid {return false}
     if lhs.position != rhs.position {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Api_TokenLoginRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".TokenLoginRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "id_token"),
+    2: .same(proto: "email"),
+    3: .same(proto: "password"),
+    4: .same(proto: "scope"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.idToken) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.email) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.password) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.scope) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.idToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.idToken, fieldNumber: 1)
+    }
+    if !self.email.isEmpty {
+      try visitor.visitSingularStringField(value: self.email, fieldNumber: 2)
+    }
+    if !self.password.isEmpty {
+      try visitor.visitSingularStringField(value: self.password, fieldNumber: 3)
+    }
+    if !self.scope.isEmpty {
+      try visitor.visitSingularStringField(value: self.scope, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Api_TokenLoginRequest, rhs: Api_TokenLoginRequest) -> Bool {
+    if lhs.idToken != rhs.idToken {return false}
+    if lhs.email != rhs.email {return false}
+    if lhs.password != rhs.password {return false}
+    if lhs.scope != rhs.scope {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Api_TokenLoginResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".TokenLoginResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "email"),
+    2: .same(proto: "uuid"),
+    3: .standard(proto: "is_new"),
+    4: .standard(proto: "access_token"),
+    5: .standard(proto: "token_type"),
+    6: .standard(proto: "expires_in"),
+    7: .standard(proto: "refresh_token"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.email) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.uuid) }()
+      case 3: try { try decoder.decodeSingularBoolField(value: &self.isNew) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.accessToken) }()
+      case 5: try { try decoder.decodeSingularStringField(value: &self.tokenType) }()
+      case 6: try { try decoder.decodeSingularInt32Field(value: &self.expiresIn) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.refreshToken) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.email.isEmpty {
+      try visitor.visitSingularStringField(value: self.email, fieldNumber: 1)
+    }
+    if !self.uuid.isEmpty {
+      try visitor.visitSingularStringField(value: self.uuid, fieldNumber: 2)
+    }
+    if self.isNew != false {
+      try visitor.visitSingularBoolField(value: self.isNew, fieldNumber: 3)
+    }
+    if !self.accessToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.accessToken, fieldNumber: 4)
+    }
+    if !self.tokenType.isEmpty {
+      try visitor.visitSingularStringField(value: self.tokenType, fieldNumber: 5)
+    }
+    if self.expiresIn != 0 {
+      try visitor.visitSingularInt32Field(value: self.expiresIn, fieldNumber: 6)
+    }
+    if !self.refreshToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.refreshToken, fieldNumber: 7)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Api_TokenLoginResponse, rhs: Api_TokenLoginResponse) -> Bool {
+    if lhs.email != rhs.email {return false}
+    if lhs.uuid != rhs.uuid {return false}
+    if lhs.isNew != rhs.isNew {return false}
+    if lhs.accessToken != rhs.accessToken {return false}
+    if lhs.tokenType != rhs.tokenType {return false}
+    if lhs.expiresIn != rhs.expiresIn {return false}
+    if lhs.refreshToken != rhs.refreshToken {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Api_TokenErrorResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".TokenErrorResponse"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "error"),
+    2: .standard(proto: "error_description"),
+    3: .standard(proto: "error_uri"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.error) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.errorDescription) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self.errorUri) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.error.isEmpty {
+      try visitor.visitSingularStringField(value: self.error, fieldNumber: 1)
+    }
+    if !self.errorDescription.isEmpty {
+      try visitor.visitSingularStringField(value: self.errorDescription, fieldNumber: 2)
+    }
+    if !self.errorUri.isEmpty {
+      try visitor.visitSingularStringField(value: self.errorUri, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Api_TokenErrorResponse, rhs: Api_TokenErrorResponse) -> Bool {
+    if lhs.error != rhs.error {return false}
+    if lhs.errorDescription != rhs.errorDescription {return false}
+    if lhs.errorUri != rhs.errorUri {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Api_VerifyEmailRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".VerifyEmailRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "verify_email_token"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.verifyEmailToken) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.verifyEmailToken.isEmpty {
+      try visitor.visitSingularStringField(value: self.verifyEmailToken, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Api_VerifyEmailRequest, rhs: Api_VerifyEmailRequest) -> Bool {
+    if lhs.verifyEmailToken != rhs.verifyEmailToken {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
