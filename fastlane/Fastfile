@@ -355,7 +355,7 @@ platform :ios do
     # HEAD the codebase is at will have already been generated during
     # development.
     load_ci_spm_cache
-    
+
     configure_code_signing
 
     build_app(
