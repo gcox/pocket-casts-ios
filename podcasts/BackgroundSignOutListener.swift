@@ -11,8 +11,7 @@ class BackgroundSignOutListener {
     private var canShowSignOut = true
 
     init(notificationCenter: NotificationCenter = NotificationCenter.default, presentingViewController: UIViewController,
-         navigationManager: NavigationManager = NavigationManager.sharedManager)
-    {
+         navigationManager: NavigationManager = NavigationManager.sharedManager) {
         self.notificationCenter = notificationCenter
         self.presentingViewController = presentingViewController
         self.navigationManager = navigationManager
@@ -26,7 +25,7 @@ class BackgroundSignOutListener {
 
     func showSignIn() {
         canShowSignOut = true
-        navigationManager.navigateTo(NavigationManager.signInPage, data: nil)
+        navigationManager.navigateTo(NavigationManager.onboardingFlow, data: ["flow": OnboardingFlow.Flow.forcedLoggedOut])
     }
 }
 

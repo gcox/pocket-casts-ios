@@ -1,6 +1,66 @@
+7.32
+-----
+- Fixed an issue where effects were not re-enabled when switching from an Airplay device back to phone output (#678)
+- When connected to CarPlay the Up Next Queue will more consistently display at the top of the podcasts list (#680)
+- Fixed an issue where the Up Next queue doesn't continue playing the next episode when connected to AirPlay (#676)
+- Show Starred for logged out users (#685)
+- Fixed an issue where the swipe actions in Up Next could be triggered when trying to reorder a row (#684)
+
+7.31
+-----
+- Fixed an issue where the close button was rendered as a solid white circle when the Dark Contrast theme was active (#552)
+- Updated the import process in Settings (#641)
+- Fixed an issue where the up next queue could be cleared or replaced (#661)
+- Updated the Now Playing metadata to put podcast author in the Artist fields to fix Siri responses and Siri Suggestions (#48)
+- Fixed shownotes not always scrolling back to the beginning when new episode is loaded (#651)
+- Fixed an issue where logged out users were incorrectly prompted to sign in when starring episodes on the Now Playing screen (#653)
+- Fixed an issue where playback speed was incorrectly set to 1x when using the "Play my podcasts" Siri intent (#41)
+
+7.30
+-----
+- Display gravatar under Profile (#584)
+- Fixed some podcasts being excluded from the Apple Podcasts import (#640)
+
+7.29
+-----
+- Fixed Edit Folder screen layout (#53)
+- Fixed an issue where episodes wouldn't resume downloading on next launch if the app was force quit (#472)
+- Fixed an issue where the podcast artwork wasn't appearin in the Now Playing Siri suggestions (#579)
+- Fixed a crash that could happen when scrubbing the player (#605)
+
+7.28
+-----
+- Updates the onboarding and login process: (#548)
+- Updates the end of year calculation to include the month of December (#554)
+- Updates the End of Year stats designs
+- Fixes an issue where the login button is not accesible on very small devices (#597)
+
+7.27
+-----
+- Add End of Year stats
+- Fixed the download indicator width in iOS 14 in Episode list cells.
+
+7.26
+-----
+- Fixed a search bar layout issue when adding/removing podcasts to folder (#378)
+- Fixed About screen dark theme background in light mode (#339)
+- Adding select/deselect all podcasts button to folder creation (#143)
+- Fixed an issue where opening a Featured Episode on the Discover view would crash the app if the podcast episode could not be found (#58)
+
+7.25
+-----
+- Fixed a crash that could happen when playing an episode while the app is in the background (#345)
+- Fixed a crash where a sync account has started listening to a local file on one device and visits the up next queue on a different device. (#371)
+- Fixed an issue where the episode totals would not display above the podcast episode list in iOS 14 (#287)
+- Fixed an issue where the Up Next queue wouldn't reset when playing all items from a filter. (#375)
+- Improved OPML import to support poll uuids (#367)
+
 7.24
 -----
-
+- Fixed an iOS 16 issue where a feedback text field had a light background for a dark theme or vice versa. (#301)
+- Fixed an issue where the keyboard would dismiss when resetting search text on discover. (#321)
+- Fixed an issue where the support feedback box would be unusable on smaller devices (#330)
+- Add haptic feedback when the user pulls to refresh (#351)
 
 7.23
 -----

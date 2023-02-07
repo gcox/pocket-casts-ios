@@ -85,6 +85,7 @@ public class MainServerHandler {
 
     private struct UploadOpmlRequest: BaseRequest {
         var urls: [String]?
+        var pollUuids: [String]?
         var device: String?
         var m: String?
         var av: String?
@@ -92,9 +93,13 @@ public class MainServerHandler {
         var c: String?
         var dt: String?
         var v: String?
+
+        public enum CodingKeys: String, CodingKey {
+            case urls, pollUuids = "poll_uuids", device, m, av, l, c, dt, v
+        }
     }
 
-    public func sendOpmlChunk(feedUrls: [String], completion: @escaping (ImportOpmlResponse?) -> Void) {
+    public func sendOpmlChunk(feedUrls: [String] = [], pollUuids: [String] = [], completion: @escaping (ImportOpmlResponse?) -> Void) {
         guard let uniqueId = ServerConfig.shared.syncDelegate?.uniqueAppId() else {
             completion(ImportOpmlResponse.failedResponse())
             return
@@ -105,6 +110,7 @@ public class MainServerHandler {
 
         var uploadRequest = baseRequest as! UploadOpmlRequest
         uploadRequest.urls = feedUrls
+        uploadRequest.pollUuids = pollUuids
 
         let url = ServerHelper.asUrl(ServerConstants.Urls.main() + "import/opml")
         guard let request = ServerHelper.createJsonRequest(url: url, params: uploadRequest, timeout: MainServerHandler.callTimeout, cachePolicy: .reloadIgnoringCacheData) else {
@@ -121,8 +127,7 @@ public class MainServerHandler {
             do {
                 let refreshResponse = try JSONDecoder().decode(ImportOpmlResponse.self, from: data)
                 completion(refreshResponse)
-            }
-            catch {
+            } catch {
                 completion(ImportOpmlResponse.failedResponse())
             }
 
@@ -156,8 +161,7 @@ public class MainServerHandler {
             do {
                 let refreshResponse = try JSONDecoder().decode(ExportPodcastsResponse.self, from: data)
                 completion(refreshResponse)
-            }
-            catch {
+            } catch {
                 completion(ExportPodcastsResponse.failedResponse())
             }
 
@@ -188,8 +192,7 @@ public class MainServerHandler {
             do {
                 let refreshResponse = try JSONDecoder().decode(ShareListResponse.self, from: data)
                 completion(refreshResponse)
-            }
-            catch {
+            } catch {
                 completion(ShareListResponse.failedResponse())
             }
 
@@ -208,8 +211,7 @@ public class MainServerHandler {
             guard statusCode == ServerConstants.HttpConstants.ok, let data = data else {
                 if let error = error {
                     FileLog.shared.addMessage("Refresh failed: with error \(error.localizedDescription), status code \(statusCode)")
-                }
-                else {
+                } else {
                     FileLog.shared.addMessage("Refresh failed: response returned no data, status code \(statusCode)")
                 }
                 completion(PodcastRefreshResponse.failedResponse())
@@ -328,8 +330,7 @@ public class MainServerHandler {
             do {
                 let searchResponse = try JSONDecoder().decode(PodcastSearchResponse.self, from: data)
                 completion(searchResponse.result?.podcast?.uuid)
-            }
-            catch {
+            } catch {
                 completion(nil)
             }
 

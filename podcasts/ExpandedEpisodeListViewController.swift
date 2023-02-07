@@ -12,13 +12,14 @@ class ExpandedEpisodeListViewController: PCViewController, UITableViewDelegate, 
     private let episodes: [DiscoverEpisode]
     private let headerView: EpisodeListHeaderView
     private var cancellables = Set<AnyCancellable>()
+    public var delegate: DiscoverDelegate? = nil
 
     init(podcastCollection: PodcastCollection) {
         self.podcastCollection = podcastCollection
         headerView = EpisodeListHeaderView(collection: podcastCollection)
         episodes = podcastCollection.episodes ?? []
         super.init(nibName: nil, bundle: nil)
-        
+
         title = podcastCollection.subtitle
         headerView.linkDelegate = self
     }
@@ -65,6 +66,7 @@ class ExpandedEpisodeListViewController: PCViewController, UITableViewDelegate, 
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! EpisodeListTableViewCell
         cell.viewModel.listId = podcastCollection.listId
         cell.viewModel.discoverEpisode = episodes[indexPath.row]
+        cell.viewModel.delegate = delegate
         cell.colors = podcastCollection.colors
         return cell
     }
@@ -83,10 +85,13 @@ class ExpandedEpisodeListViewController: PCViewController, UITableViewDelegate, 
             AnalyticsHelper.podcastEpisodeTapped(fromList: listId, podcastUuid: podcastUuid, episodeUuid: episodeUuid)
         }
 
-        DiscoverEpisodeViewModel.loadPodcast(podcastUuid)
+        DiscoverEpisodeViewModel.loadPodcast(podcastUuid, episodeUuid: episodeUuid)
             .receive(on: RunLoop.main)
             .sink { [weak self] podcast in
-                guard let podcast = podcast else { return }
+                guard let podcast = podcast else {
+                    self?.delegate?.failedToLoadEpisode()
+                    return
+                }
                 self?.show(discoverEpisode: episode, podcast: podcast)
             }
             .store(in: &cancellables)
@@ -94,24 +99,29 @@ class ExpandedEpisodeListViewController: PCViewController, UITableViewDelegate, 
 
     func show(discoverEpisode: DiscoverEpisode, podcast: Podcast) {
         guard let uuid = discoverEpisode.uuid else { return }
-        let episodeController = EpisodeDetailViewController(episodeUuid: uuid, podcast: podcast)
+        let episodeController = EpisodeDetailViewController(episodeUuid: uuid, podcast: podcast, source: .discover)
         episodeController.modalPresentationStyle = .formSheet
-        
+
         present(episodeController, animated: true)
     }
-    
+
     func linkTapped() {
         guard let link = podcastCollection.webUrl, let url = URL(string: link) else { return }
-        
+
         if UserDefaults.standard.bool(forKey: Constants.UserDefaults.openLinksInExternalBrowser) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-        else {
+        } else {
             let config = SFSafariViewController.Configuration()
             config.entersReaderIfAvailable = false
             let safariViewController = SFSafariViewController(url: url, configuration: config)
-            
+
             present(safariViewController, animated: true, completion: nil)
         }
+    }
+}
+
+extension ExpandedEpisodeListViewController: AnalyticsSourceProvider {
+    var analyticsSource: AnalyticsSource {
+        .discoverEpisodeList
     }
 }

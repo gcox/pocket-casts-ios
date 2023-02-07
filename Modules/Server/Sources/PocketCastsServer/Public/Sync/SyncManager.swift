@@ -5,19 +5,19 @@ import UIKit
 
 public class SyncManager {
     public class func isUserLoggedIn() -> Bool {
-        if let email = ServerSettings.syncingEmail(), email.count > 0 {
+        if let email = ServerSettings.syncingEmail(), !email.isEmpty {
             return true
         }
         return false
     }
-    
+
     public class func isFirstSyncInProgress() -> Bool {
         let lastSyncStartDate = UserDefaults.standard.string(forKey: ServerConstants.UserDefaults.lastSyncStartDate)
         let lastModifiedServerDate = UserDefaults.standard.string(forKey: ServerConstants.UserDefaults.lastModifiedServerDate)
-        
+
         return (lastSyncStartDate != nil && lastModifiedServerDate == nil)
     }
-    
+
     public class func isRefreshInProgress() -> Bool {
         guard let lastRefreshStartDate = UserDefaults.standard.object(forKey: ServerConstants.UserDefaults.lastRefreshStartTime) as? Date else {
             return false
@@ -35,7 +35,7 @@ public class SyncManager {
         NotificationCenter.postOnMainThread(notification: .serverUserWillBeSignedOut, userInfo: ["user_initiated": userInitiated])
 
         clearTokensFromKeyChain()
-        
+
         ServerSettings.setSyncingEmail(email: nil)
         ServerSettings.userId = nil
 
@@ -53,12 +53,27 @@ public class SyncManager {
         UserDefaults.standard.removeObject(forKey: ServerConstants.UserDefaults.subscriptionGiftAcknowledgement)
         UserDefaults.standard.removeObject(forKey: ServerConstants.UserDefaults.subscriptionPodcasts)
         UserDefaults.standard.synchronize()
-        
+
         ServerConfig.shared.syncDelegate?.cleanupCloudOnlyFiles()
     }
-    
+
     public class func clearTokensFromKeyChain() {
+        KeychainHelper.removeKey(ServerConstants.Values.syncingEmailKey)
         KeychainHelper.removeKey(ServerConstants.Values.syncingPasswordKey)
         KeychainHelper.removeKey(ServerConstants.Values.syncingV2TokenKey)
+        KeychainHelper.removeKey(ServerConstants.Values.refreshTokenKey)
+        KeychainHelper.removeKey(ServerConstants.Values.appleAuthUserIDKey)
     }
+
+}
+
+// MARK: - Sync Reason
+public extension SyncManager {
+    enum SyncingReason: String {
+        case accountCreated
+        case login
+    }
+
+    /// Defines a reason why a sync is being performed
+    static var syncReason: SyncManager.SyncingReason? = nil
 }

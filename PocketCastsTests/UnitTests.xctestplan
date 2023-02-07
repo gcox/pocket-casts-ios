@@ -13,6 +13,7 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : false,
     "environmentVariableEntries" : [
       {
         "key" : "BUILDKITE_ANALYTICS_TOKEN",
@@ -55,6 +56,27 @@
         "containerPath" : "container:podcasts.xcodeproj",
         "identifier" : "45ECEF7A27E910E300C65030",
         "name" : "PocketCastsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/DataModel",
+        "identifier" : "PocketCastsDataModelTests",
+        "name" : "PocketCastsDataModelTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/Server",
+        "identifier" : "PocketCastsServerTests",
+        "name" : "PocketCastsServerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Modules\/Utils",
+        "identifier" : "PocketCastsUtilsTests",
+        "name" : "PocketCastsUtilsTests"
       }
     }
   ],

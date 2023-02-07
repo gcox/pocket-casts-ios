@@ -2,12 +2,12 @@ import PocketCastsServer
 import UIKit
 
 protocol IconSelectorCellDelegate: AnyObject {
-    func changeIcon(name: String?)
+    func changeIcon(icon: IconType)
     func iconSelectorPresentingVC() -> UIViewController
 }
 
-enum IconType: Int, CaseIterable {
-    case primary = 0, dark, roundLight, roundDark, indigo, rose, pocketCats, redVelvet, plus, classic, electricBlue, electricPink, radioactivity
+enum IconType: Int, CaseIterable, AnalyticsDescribable {
+    case primary = 0, dark, roundLight, roundDark, indigo, rose, pocketCats, redVelvet, plus, classic, electricBlue, electricPink, radioactivity, halloween
 
     init(rawName: String) {
         self = IconType.allCases.first(where: { $0.iconName == rawName }) ?? IconType.primary
@@ -41,6 +41,8 @@ enum IconType: Int, CaseIterable {
             return L10n.appIconElectricPink
         case .radioactivity:
             return L10n.appIconRadioactivity
+        case .halloween:
+            return L10n.appIconHalloween
         }
     }
 
@@ -72,6 +74,8 @@ enum IconType: Int, CaseIterable {
             return UIImage(named: "AppIcon-Electric-Pink108x108")
         case .radioactivity:
             return UIImage(named: "AppIcon-Radioactive108x108")
+        case .halloween:
+            return UIImage(named: "AppIcon-Halloween108x108")
         }
     }
 
@@ -103,6 +107,41 @@ enum IconType: Int, CaseIterable {
             return "AppIcon-Electric-Pink"
         case .radioactivity:
             return "AppIcon-Radioactive"
+        case .halloween:
+            return "AppIcon-Halloween"
+        }
+    }
+
+    var analyticsDescription: String {
+        switch self {
+        case .primary:
+            return "default"
+        case .dark:
+            return "dark"
+        case .roundLight:
+            return "round_light"
+        case .roundDark:
+            return "round_dark"
+        case .indigo:
+            return "indigo"
+        case .rose:
+            return "rose"
+        case .pocketCats:
+            return "pocket_cats"
+        case .redVelvet:
+            return "red_velvet"
+        case .plus:
+            return "plus"
+        case .classic:
+            return "classic"
+        case .electricBlue:
+            return "electric_blue"
+        case .electricPink:
+            return "electric_pink"
+        case .radioactivity:
+            return "radioactive"
+        case .halloween:
+            return "halloween"
         }
     }
 }
@@ -116,7 +155,7 @@ class IconSelectorCell: ThemeableCell, UICollectionViewDataSource, UICollectionV
             collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         }
     }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         if let gridLayout = collectionView.collectionViewLayout as? GridLayout {
@@ -126,9 +165,9 @@ class IconSelectorCell: ThemeableCell, UICollectionViewDataSource, UICollectionV
             gridLayout.itemSpacing = itemSpacing
         }
     }
-    
+
     private static let firstPaidIconIndex = 8
-    
+
     private var numVisibleColoumns = 3 as CGFloat
     private var itemSpacing = 0 as CGFloat
     private var maxCellWidth = 124 as CGFloat
@@ -142,30 +181,30 @@ class IconSelectorCell: ThemeableCell, UICollectionViewDataSource, UICollectionV
         let calculatedWidth = min(maxWidth, (widthAvailable - peekWidth - (itemSpacing * (numVisibleColoumns + 1))) / numVisibleColoumns)
         return calculatedWidth
     }
-    
+
     weak var delegate: IconSelectorCellDelegate!
-    
+
     private let themeAbstractCellId = "ThemeAbstractCell"
-    
+
     // MARK: - GridLayoutDelegate
-    
+
     func sizeForItem(inCollectionView collectionView: UICollectionView, withLayout layout: UICollectionViewLayout, atIndexPath indexPath: IndexPath) -> CGSize {
         CGSize(width: cellWidth, height: cellHeight)
     }
-    
+
     // MARK: - UICollectionView Methods
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        13
+        IconType.allCases.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: themeAbstractCellId, for: indexPath) as! ThemeAbstractCell
-        
+
         cell.imageView.layer.cornerRadius = 18.95
         cell.shadowView.layer.cornerRadius = 18.95
         cell.underShadowView.layer.cornerRadius = 18.95
@@ -174,15 +213,14 @@ class IconSelectorCell: ThemeableCell, UICollectionViewDataSource, UICollectionV
         let iconType = IconType(rawValue: indexPath.row) ?? .primary
         cell.nameLabel.text = iconType.description
         cell.imageView.image = iconType.icon
-        
+
         cell.isLocked = !SubscriptionHelper.hasActiveSubscription() && indexPath.item > 7
         if UIApplication.shared.alternateIconName != nil {
             cell.isCellSelected = selectedIcon().rawValue == indexPath.item
-        }
-        else {
+        } else {
             cell.isCellSelected = indexPath.item == 0
         }
-        
+
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = cell.nameLabel.text
         if cell.isLocked {
@@ -190,26 +228,25 @@ class IconSelectorCell: ThemeableCell, UICollectionViewDataSource, UICollectionV
         }
         return cell
     }
-    
+
     // MARK: - CollectionView Delegate
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if !SubscriptionHelper.hasActiveSubscription(), indexPath.item >= IconSelectorCell.firstPaidIconIndex {
             collectionView.deselectItem(at: indexPath, animated: true)
 
             NavigationManager.sharedManager.showUpsellView(from: delegate.iconSelectorPresentingVC(), source: .icons)
-        }
-        else {
-            delegate?.changeIcon(name: IconType(rawValue: indexPath.row)?.iconName)
+        } else {
+            delegate?.changeIcon(icon: IconType(rawValue: indexPath.row) ?? .primary)
             collectionView.reloadData()
         }
     }
-    
+
     func scrollToSelected() {
         let selectedItem = selectedIcon().rawValue
         collectionView.scrollToItem(at: IndexPath(item: selectedItem, section: 0), at: .centeredHorizontally, animated: false)
     }
-    
+
     func setCurrentSelectedIcon() {
         let selectedItem = selectedIcon().rawValue
         collectionView.selectItem(at: IndexPath(item: selectedItem, section: 0), animated: true, scrollPosition: .centeredHorizontally)
